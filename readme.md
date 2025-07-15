@@ -31,7 +31,7 @@ zUI est un systeme de menu moderne et personnalisable pour FiveM, developpe avec
 ## Installation
 
 1. Telechargez le script et placez-le dans votre dossier `resources`
-2. Ajoutez `ensure zUI-Dev` dans votre `server.cfg`
+2. Ajoutez `ensure zUI-v2` dans votre `server.cfg`
 3. Redemarrez votre serveur
 
 ### Structure des fichiers :
