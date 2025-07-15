@@ -12,20 +12,21 @@ zUI.Slider = function(label, description, percentage, step, styles, action)
     assert(type(styles) == "table", "Slider styles must be a table")
 
     local itemIndex = #ITEMS + 1
-    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
-    
+    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or
+        ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
+
     if not ITEM_IDS[CURRENT_MENU] then
         ITEM_IDS[CURRENT_MENU] = {}
     end
     ITEM_IDS[CURRENT_MENU][itemIndex] = itemId
-    
+
     local item = {}
     item.type = "slider"
-    item.label = label
+    item.label = label or ""
     item.description = description or ""
-    item.percentage = percentage
-    item.step = step
-    item.styles = styles
+    item.percentage = percentage or 0
+    item.step = step or 10
+    item.styles = styles or {}
     item.itemId = itemId
     ITEMS[itemIndex] = item
     ACTIONS[itemId] = { action }

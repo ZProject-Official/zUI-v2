@@ -10,19 +10,20 @@ zUI.Checkbox = function(label, description, state, styles, action)
     assert(type(styles) == "table", "Checkbox styles must be a table")
 
     local itemIndex = #ITEMS + 1
-    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
-    
+    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or
+        ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
+
     if not ITEM_IDS[CURRENT_MENU] then
         ITEM_IDS[CURRENT_MENU] = {}
     end
     ITEM_IDS[CURRENT_MENU][itemIndex] = itemId
-    
+
     local item = {}
     item.type = "checkbox"
-    item.label = label
+    item.label = label or ""
     item.description = description or ""
-    item.state = state
-    item.styles = styles
+    item.state = state or false
+    item.styles = styles or {}
     item.itemId = itemId
     ITEMS[itemIndex] = item
     ACTIONS[itemId] = { action }

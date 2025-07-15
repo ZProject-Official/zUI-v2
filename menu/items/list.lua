@@ -12,20 +12,21 @@ zUI.List = function(label, description, items, index, styles, action)
     assert(type(styles) == "table", "List styles must be a table")
 
     local itemIndex = #ITEMS + 1
-    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
-    
+    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or
+        ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
+
     if not ITEM_IDS[CURRENT_MENU] then
         ITEM_IDS[CURRENT_MENU] = {}
     end
     ITEM_IDS[CURRENT_MENU][itemIndex] = itemId
-    
+
     local item = {}
     item.type = "list"
-    item.label = label
+    item.label = label or ""
     item.description = description or ""
-    item.items = items
-    item.index = index
-    item.styles = styles
+    item.items = items or {}
+    item.index = index or 1
+    item.styles = styles or {}
     item.itemId = itemId
     ITEMS[itemIndex] = item
     ACTIONS[itemId] = { action }

@@ -10,26 +10,27 @@ zUI.ColorPicker = function(label, description, value, styles, action)
     assert(type(styles) == "table", "ColorPicker styles must be a table")
 
     local itemIndex = #ITEMS + 1
-    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
-    
+    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or
+        ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
+
     if not ITEM_IDS[CURRENT_MENU] then
         ITEM_IDS[CURRENT_MENU] = {}
     end
     ITEM_IDS[CURRENT_MENU][itemIndex] = itemId
-    
+
     local item = {}
     item.type = "colorpicker"
-    item.label = label
+    item.label = label or ""
     item.description = description or ""
-    item.value = value
-    item.styles = styles
+    item.value = value or ""
+    item.styles = styles or ""
     item.itemId = itemId
     ITEMS[itemIndex] = item
     ACTIONS[itemId] = { action }
     return itemId
 end
 
-RegisterNuiCallback("menu:colorPicker:manageFocus", function (data, cb)
+RegisterNuiCallback("menu:colorPicker:manageFocus", function(data, cb)
     if data.state then
         SetNuiFocus(true, true)
         SetNuiFocusKeepInput(false)

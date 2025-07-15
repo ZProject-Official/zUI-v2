@@ -12,27 +12,28 @@ zUI.TextArea = function(label, description, value, placeholder, styles, action)
     assert(type(styles) == "table", "TextArea styles must be a table")
 
     local itemIndex = #ITEMS + 1
-    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
-    
+    local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or
+        ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
+
     if not ITEM_IDS[CURRENT_MENU] then
         ITEM_IDS[CURRENT_MENU] = {}
     end
     ITEM_IDS[CURRENT_MENU][itemIndex] = itemId
-    
+
     local item = {}
     item.type = "textarea"
-    item.label = label
+    item.label = label or ""
     item.description = description or ""
-    item.value = value
-    item.placeholder = placeholder
-    item.styles = styles
+    item.value = value or ""
+    item.placeholder = placeholder or ""
+    item.styles = styles or {}
     item.itemId = itemId
     ITEMS[itemIndex] = item
     ACTIONS[itemId] = { action }
     return itemId
 end
 
-RegisterNuiCallback("menu:textArea:manageFocus", function (data, cb)
+RegisterNuiCallback("menu:textArea:manageFocus", function(data, cb)
     if data.state then
         SetNuiFocus(true, true)
         SetNuiFocusKeepInput(false)
