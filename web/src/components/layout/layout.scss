@@ -1,0 +1,14 @@
+.layout {
+  position: absolute;
+  -webkit-user-drag: none;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.5s;
+
+  &.selected {
+    outline: solid 2px red;
+  }
+}

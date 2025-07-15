@@ -1,0 +1,37 @@
+.color-list-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5vw;
+  
+    .carousel {
+      overflow: hidden;
+      min-width: 1.5vw;
+      max-width: 1.5vw;
+  
+      .carousel-track {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        transform: translateX(0);
+      }
+  
+      .item {
+        min-width: 1.5vw;
+        max-width: 1.5vw;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        .circle {
+          width: 1vw;
+          aspect-ratio: 1/1;
+          border-radius: 100em;
+          outline: solid 1px white;
+        }
+      }
+    }
+  }
+  

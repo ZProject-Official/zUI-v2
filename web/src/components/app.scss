@@ -1,0 +1,32 @@
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  transition: 0.5s;
+
+  #save {
+    position: absolute;
+    bottom: 2.5%;
+    right: 2.5%;
+    box-sizing: border-box;
+    border-radius: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 2vw;
+    aspect-ratio: 1/1;
+    color: white;
+    user-select: none;
+    background-color: #ff3837;
+    transition: 0.5s;
+
+    &:hover {
+      box-shadow: 0 0 10px #ff3837;
+    }
+
+    svg {
+      scale: 2;
+    }
+  }
+}

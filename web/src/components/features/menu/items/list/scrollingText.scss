@@ -1,0 +1,32 @@
+.scrolling-text-container {
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.scrolling-text-content {
+  display: flex;
+  white-space: nowrap;
+  will-change: transform;
+  gap: 1rem;
+}
+
+.scrolling-text-content.scrolling {
+  animation: scroll-loop linear infinite;
+}
+
+.scrolling-text-content span {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@keyframes scroll-loop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-1 * var(--scroll-distance, 100%)));
+  }
+}

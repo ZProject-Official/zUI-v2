@@ -1,0 +1,22 @@
+#img-container {
+  width: 100%;
+  height: fit-content !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  #img-title {
+    position: absolute;
+    top: 5%;
+    z-index: 5;
+    color: white;
+    font-family: var(--custom-info-font-family);
+  }
+
+  #img {
+    width: 100%;
+    border-radius: 0.25rem;
+  }
+}

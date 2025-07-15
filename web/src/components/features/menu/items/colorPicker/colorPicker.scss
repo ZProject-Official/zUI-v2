@@ -1,0 +1,20 @@
+.color-container {
+  height: 2vh;
+  width: 2vh;
+  border-radius: 0.25em;
+  overflow: hidden;
+  position: relative;
+  outline: solid white 2px;
+
+  .color {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    border: none;
+    outline: none;
+    padding: 0;
+    background: none;
+  }
+}

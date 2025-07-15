@@ -1,0 +1,22 @@
+.slot-wrapper {
+  position: relative;
+  height: 2.5vh;
+  width: 30%;
+  overflow-y: hidden;
+  overflow-x: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.slot-number {
+  position: absolute;
+  color: white;
+  font-family: var(--custom-menu-font-family);
+}

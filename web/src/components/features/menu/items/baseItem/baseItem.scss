@@ -1,0 +1,43 @@
+.base-item {
+  width: 100%;
+  height: 4vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 3.5%;
+  opacity: 0.4;
+  transition: opacity 0.5s ease-in-out;
+
+  &.selected {
+    opacity: 1;
+  }
+
+  .left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5vw;
+
+    .label {
+      color: white;
+      font-family: var(--custom-menu-font-family);
+      font-weight: 500;
+    }
+  }
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5vw;
+  }
+}
+
+.badge {
+  max-width: 4vh;
+  max-height: 2vh;
+}

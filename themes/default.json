@@ -1,0 +1,43 @@
+{
+  "menu": {
+    "displayBanner": true,
+    "displayInformations": true,
+    "displayControlsIndicator": true,
+    "cornersRadius": 0.5,
+    "perspective": true,
+    "margin": false,
+    "shadow": true,
+    "hoverStyle": "liquid",
+    "animations": {
+      "entry": "zoomIn",
+      "exit": "slideOutVertical",
+      "onSwitch": true,
+      "onScroll": true
+    },
+    "colors": {
+      "primary": "#FF3837",
+      "background": "rgba(18, 18, 18, 0.5)",
+      "description": "#121212",
+      "informations": "#121212",
+      "controlsIndicator": "#121212",
+      "itemSelected": "#FF3837",
+      "banner": "#FF3837"
+    },
+    "font": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
+    "maxVisibleItems": 10
+  },
+  "info": {
+    "cornerRadius": 0.5,
+    "perspective": true,
+    "shadow": true,
+    "animations": {
+      "entry": "zoomIn",
+      "exit": "slideOutVertical"
+    },
+    "colors": {
+      "primary": "#FF3837",
+      "background": "rgba(18, 18, 18, 0.5)"
+    },
+    "font": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+  }
+}

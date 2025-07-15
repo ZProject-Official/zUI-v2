@@ -1,0 +1,25 @@
+#percent-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25vw;
+
+  .percent-box {
+    position: relative;
+    width: 1vw;
+    height: 0.75vh;
+    border-radius: 0.1rem;
+
+    &.blurred::after {
+      position: absolute;
+      border-radius: 0.1rem;
+      content: "";
+      width: 100%;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+  }
+}

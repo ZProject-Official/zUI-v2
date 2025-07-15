@@ -1,0 +1,21 @@
+.slider-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5vw;
+  width: 7.5vw;
+  
+  .percentage-bar {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    height: 0.75vh;
+    width: 70%;
+    background-color: rgba(17, 17, 17, 0.5);
+    border-radius: 100em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+  }
+}
