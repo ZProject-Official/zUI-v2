@@ -1,4 +1,4 @@
-# Documentation zUI - Systeme de Menu Interactif pour FiveM
+# Documentation zUI
 
 ## Table des matieres
 
