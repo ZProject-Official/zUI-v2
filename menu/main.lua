@@ -34,6 +34,7 @@ zUI.CreateMenu = function(title, subtitle, description, theme, banner, key, mapp
     self.opening = nil
     self.closing = nil
     MENUS[self.id] = self
+    RegisterMenu(self.id)
     return self.id
 end
 
@@ -55,6 +56,7 @@ zUI.CreateSubMenu = function(parent, title, subtitle, description)
     self.description = description or ""
     self.items = nil
     self.theme = MENUS[parent].theme
+    self.banner = MENUS[parent].banner
     self.visible = false
     self.closable = true
     self.opening = nil
