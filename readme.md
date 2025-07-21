@@ -117,7 +117,7 @@ local monMenu = zUI.CreateMenu(
     "default",                 -- theme (string)
     "https://example.com/banner.png", -- banner (string|nil)
     "F5",                      -- key (string|nil)
-    "keyboard"                 -- mapping (string|nil)
+    "La description du mapping"                 -- mapping (string|nil)
 )
 ```
 
@@ -685,7 +685,7 @@ Pour obtenir de l'aide ou signaler un bug :
 
 1. Vérifiez cette documentation
 2. Consultez les exemples fournis
-3. Contactez l'équipe de développement
+3. Contactez le [support](https://discord.gg/zproject)
 
 ---
 
