@@ -529,7 +529,7 @@ local hoveredItemId = zUI.GetHoveredItem()
 ```lua
 local zUI = exports["zUI-v2"]:getObject()
 
-local menu = zUI.CreateMenu("Véhicule", "Gestion du véhicule", "Intéractions disponibles :", "myTheme")
+local menu = zUI.CreateMenu("Véhicule", "Gestion du véhicule", "Intéractions disponibles :", "myTheme", nil, "F5", "Ouvrir le menu")
 local vehicules = {"Adder", "Zentorno", "T20", "Osiris"}
 local vehiculeIndex = 1
 local volumeRadio = 50
