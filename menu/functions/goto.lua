@@ -4,10 +4,16 @@ zUI.Goto = function(target)
     assert(MENUS[CURRENT_MENU], "zUI.Goto: Aucun menu actif n'est défini (CURRENT_MENU est invalide)")
     assert(MENUS[target], "zUI.Goto: Le menu cible '" .. target .. "' n'existe pas")
 
-    MENUS[CURRENT_MENU].visible = false
-    zUI.SetVisible(target, true)
+    -- Utiliser SetVisible pour cohérence et cleanup proper
+    local currentMenu = CURRENT_MENU
+    zUI.SetVisible(currentMenu, false)
+    
+    -- Petit délai pour éviter les conflits de threads
+    Citizen.Wait(50)
+    
     TriggerNuiEvent("menu:setIndexHistory", {
-        lastMenu = CURRENT_MENU,
+        lastMenu = currentMenu,
         newMenu = target
     })
+    zUI.SetVisible(target, true)
 end

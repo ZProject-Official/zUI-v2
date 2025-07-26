@@ -1,4 +1,4 @@
-import { ReactNode, FC, useState, useEffect, useRef } from "react";
+import { ReactNode, FC, useState, useEffect, useRef, useCallback, useMemo } from "react";
 import "./layout.scss";
 
 interface LayoutProps {
@@ -65,25 +65,32 @@ const Layout: FC<LayoutProps> = ({
     };
   }, [dragOffset, selected, position, onPositionChange]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (!selected) return;
     isDraggingRef.current = true;
     setDragOffset({
       x: e.clientX - position.x,
       y: e.clientY - position.y,
     });
-  };
+  }, [selected, position.x, position.y]);
+
+  const layoutStyle = useMemo(() => ({
+    zIndex: index,
+    left: `${position.x}px`,
+    top: `${position.y}px`,
+    position: "absolute" as const,
+    cursor: editMod ? (selected ? "move" : "pointer") : "default",
+  }), [index, position.x, position.y, editMod, selected]);
+
+  const className = useMemo(() => 
+    `layout ${selected && editMod ? "selected" : ""}`,
+    [selected, editMod]
+  );
 
   return (
     <div
-      className={`layout ${selected && editMod ? "selected" : ""}`}
-      style={{
-        zIndex: index,
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        position: "absolute",
-        cursor: editMod ? (selected ? "move" : "pointer") : "default",
-      }}
+      className={className}
+      style={layoutStyle}
       onClick={onSelected}
       onMouseDown={handleMouseDown}
       ref={contentRef}

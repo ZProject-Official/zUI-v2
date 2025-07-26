@@ -8,15 +8,27 @@ Citizen.CreateThread(function()
     repeat
         Wait(100)
     until NetworkIsPlayerActive(PlayerId())
-    local positions = json.decode(GetResourceKvpString("zUI:positions:MyPersonalPositions"))
-    if positions then
-        TriggerNuiEvent("app:setPositions", positions)
+    
+    local positionsString = GetResourceKvpString("zUI:positions:MyPersonalPositions")
+    if positionsString and positionsString ~= "" then
+        local success, positions = pcall(json.decode, positionsString)
+        if success and positions and type(positions) == "table" then
+            TriggerNuiEvent("app:setPositions", positions)
+        else
+            print("^3[zUI] Erreur: Positions KVP corrompues, ignorées^7")
+        end
     end
 end)
 
 RegisterNuiCallback("app:savePositions", function(data, cb)
-    local positions = json.encode(data.positions)
-    SetResourceKvp("zUI:positions:MyPersonalPositions", positions)
+    if data and data.positions and type(data.positions) == "table" then
+        local success, positions = pcall(json.encode, data.positions)
+        if success and positions then
+            SetResourceKvp("zUI:positions:MyPersonalPositions", positions)
+        else
+            print("^1[zUI] Erreur: Impossible d'encoder les positions^7")
+        end
+    end
     cb("ok :)")
 end)
 

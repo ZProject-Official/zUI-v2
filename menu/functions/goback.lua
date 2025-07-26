@@ -4,21 +4,18 @@ zUI.Goback = function()
 
     local current_menu = MENUS[CURRENT_MENU]
     if current_menu.parent then
-        MENUS[current_menu.id].visible = false
-        MENUS[current_menu.parent].visible = true
-        TriggerNuiEvent("menu:show", {
-            title = MENUS[current_menu.parent].title,
-            subtitle = MENUS[current_menu.parent].subtitle,
-            description = MENUS[current_menu.parent].description,
-            theme = MENUS[current_menu.parent].theme,
-            banner = MENUS[current_menu.parent].banner,
-        })
+        -- Utiliser SetVisible pour la cohérence et éviter les race conditions
+        local parentMenu = current_menu.parent
+        zUI.SetVisible(current_menu.id, false)
+        
+        -- Petit délai pour éviter les conflits de threads
+        Citizen.Wait(50)
+        
         TriggerNuiEvent("menu:setIndexHistory", {
             lastMenu = current_menu.id,
-            newMenu = current_menu.parent
+            newMenu = parentMenu
         })
-        CURRENT_MENU = current_menu.parent
-        UpdateItems(current_menu.parent)
+        zUI.SetVisible(parentMenu, true)
     else
         if current_menu.closable then
             zUI.SetVisible(current_menu.id, false)
