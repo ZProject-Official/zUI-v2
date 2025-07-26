@@ -6,7 +6,7 @@
 ---@param action fun(onChange: boolean, value: string)
 zUI.TextArea = function(label, description, value, placeholder, styles, action)
     assert(type(label) == "string", "TextArea label must be a string")
-    assert(type(description) == "string", "TextArea description must be a string")
+    assert(description == nil or type(description) == "string", "TextArea description must be a string or nil")
     assert(type(value) == "string", "TextArea value must be a string")
     assert(type(placeholder) == "string", "TextArea placeholder must be a string")
     assert(type(styles) == "table", "TextArea styles must be a table")

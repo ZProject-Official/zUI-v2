@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useRef, useMemo } from "react";
+import { FC, useState, useEffect, useRef, useMemo, useCallback, memo } from "react";
 import { useNuiEvent } from "../../../utils/useNuiEvent";
 import { themeProps } from "../../app";
 import { AnimatePresence, motion } from "framer-motion";
@@ -252,12 +252,18 @@ const SendMessage = (type: string, data: {}) => {
   window.postMessage({ type: type, data }, "*");
 };
 
-function renderMenuItem(
-  item: itemProps,
-  i: number,
-  isSelected: boolean,
-  theme: themeProps | undefined
-) {
+// Memoized menu item renderer pour éviter les re-renders
+const renderMenuItem = memo(function RenderMenuItem({
+  item,
+  i,
+  isSelected,
+  theme,
+}: {
+  item: itemProps;
+  i: number;
+  isSelected: boolean;
+  theme: themeProps | undefined;
+}) {
   switch (item.type) {
     case "line":
       return (
@@ -299,7 +305,7 @@ function renderMenuItem(
     default:
       return null;
   }
-}
+});
 
 const Menu: FC<MenuProps> = ({ editMod = false }) => {
   const [visible, setVisible] = useState<boolean>(false);
@@ -626,13 +632,13 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     };
   }, [numOfItems, index, items]);
 
-  const closeMenu = () => {
+  const closeMenu = useCallback(() => {
     setVisible(false);
     setInformation(null);
     setItems(null);
     setIndex(1);
     fetchNui("menu:closed");
-  };
+  }, []);
   useNuiEvent<infoProps>(
     "menu:show",
     ({ title, subtitle, description, banner, theme }) => {
@@ -923,12 +929,12 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                                 : {}
                             }
                           >
-                            {renderMenuItem(
+                            {renderMenuItem({
                               item,
                               i,
                               isSelected,
-                              information?.theme
-                            )}
+                              theme: information?.theme
+                            })}
                           </motion.div>
                         );
                       }
