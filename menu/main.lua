@@ -10,6 +10,8 @@ MENU_COUNTER = 0
 ---@param key string | nil
 ---@param mapping string | nil
 zUI.CreateMenu = function(title, subtitle, description, theme, banner, key, mapping)
+    local Invoke = GetInvokingResource()
+    assert(type(Invoke) == "string", "zUI.CreateMenu: Invoke must be a string")
     assert(title == nil or type(title) == "string", "Menu title must be a string or nil")
     assert(subtitle == nil or type(subtitle) == "string", "Menu subtitle must be a string or nil")
     assert(description == nil or type(description) == "string", "Menu description must be a string or nil")
@@ -33,6 +35,7 @@ zUI.CreateMenu = function(title, subtitle, description, theme, banner, key, mapp
     self.closable = true
     self.opening = nil
     self.closing = nil
+    self.Invoke = Invoke
     MENUS[self.id] = self
     RegisterMenu(self)
     return self.id
