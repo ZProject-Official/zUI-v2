@@ -685,7 +685,7 @@ Pour obtenir de l'aide ou signaler un bug :
 
 1. Vérifiez cette documentation
 2. Consultez les exemples fournis
-3. Contactez le [support](https://discord.gg/zproject)
+3. Contactez le [support](https://discord.gg/hN5PZwkuGJ)
 
 ---
 
