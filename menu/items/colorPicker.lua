@@ -5,7 +5,7 @@
 ---@param action fun(onChange: boolean, value: string)
 zUI.ColorPicker = function(label, description, value, styles, action)
     assert(type(label) == "string", "ColorPicker label must be a string")
-    assert(type(description) == "string", "ColorPicker description must be a string")
+    assert(description == nil or type(description) == "string", "ColorPicker description must be a string or nil")
     assert(type(value) == "string", "ColorPicker value must be a string")
     assert(type(styles) == "table", "ColorPicker styles must be a table")
 

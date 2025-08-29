@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useCallback, useMemo } from "react";
 
 import "./app.scss";
 
@@ -62,17 +62,21 @@ interface Feature {
   position?: { x: number; y: number };
 }
 
+// Memoize components to prevent unnecessary re-renders
+const MenuComponent = ({ editMod }: { editMod: boolean }) => <Menu editMod={editMod} />;
+const InfoComponent = ({ editMod }: { editMod: boolean }) => <Info editMod={editMod} />;
+
 const initialFeatures: Feature[] = [
   {
     name: "menu",
     defaultPos: { x: 25, y: 25 },
-    component: (editMod: boolean) => <Menu editMod={editMod} />,
+    component: (editMod: boolean) => <MenuComponent editMod={editMod} />,
     selected: false,
   },
   {
     name: "info",
     defaultPos: { x: 70, y: 25 },
-    component: (editMod: boolean) => <Info editMod={editMod} />,
+    component: (editMod: boolean) => <InfoComponent editMod={editMod} />,
     selected: false,
   },
 ];
@@ -121,7 +125,7 @@ const App: FC = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  const handleOnSelected = (index: number) => {
+  const handleOnSelected = useCallback((index: number) => {
     if (!editMod) {
       setFeatures(features.map((feature) => ({ ...feature, selected: false })));
       return;
@@ -133,9 +137,9 @@ const App: FC = () => {
         selected: i === index,
       }))
     );
-  };
+  }, [editMod, features]);
 
-  const handlePositionChange = (
+  const handlePositionChange = useCallback((
     index: number,
     position: { x: number; y: number }
   ) => {
@@ -147,9 +151,9 @@ const App: FC = () => {
       };
       return newFeatures;
     });
-  };
+  }, []);
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     const positions = features.reduce(
       (acc, feature) => ({
         ...acc,
@@ -172,14 +176,18 @@ const App: FC = () => {
         {}
       ),
     });
-  };
+  }, [features]);
+
+  // Memoize style object to prevent unnecessary re-renders
+  const appStyle = useMemo(() => ({
+    background: `${editMod ? "rgba(0, 0, 0, 0.5)" : "transparent"}`,
+    willChange: editMod ? "background" : "auto"
+  }), [editMod]);
 
   return (
     <div
       id='app'
-      style={{
-        background: `${editMod ? "rgba(0, 0, 0, 0.5)" : "transparent"}`,
-      }}
+      style={appStyle}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           handleOnSelected(-1);
