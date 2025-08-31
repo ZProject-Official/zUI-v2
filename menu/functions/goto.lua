@@ -6,4 +6,8 @@ zUI.Goto = function(target)
 
     MENUS[CURRENT_MENU].visible = false
     zUI.SetVisible(target, true)
+    TriggerNuiEvent("menu:setIndexHistory", {
+        lastMenu = CURRENT_MENU,
+        newMenu = target
+    })
 end
