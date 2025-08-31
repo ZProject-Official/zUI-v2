@@ -635,9 +635,14 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
 
       processKeyPress({ key: pressedKey } as KeyboardEvent);
 
+      const delay =
+        pressedKey === "Enter" || pressedKey === "Backspace"
+          ? 250
+          : information?.theme.menu.keyPressDelay ?? 150;
+
       const interval = window.setInterval(() => {
         processKeyPress({ key: pressedKey } as KeyboardEvent);
-      }, information?.theme.menu.keyPressDelay ?? 150);
+      }, delay);
 
       keyIntervals.current.set(pressedKey, interval);
     };
@@ -976,7 +981,6 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                     })}
                   </motion.div>
                 </AnimatePresence>
-                <div id="description"></div>
               </div>
             )}
             {information?.theme.menu.displayControlsIndicator && (
@@ -1034,7 +1038,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                         : {}
                     }
                   >
-                    {selectedItem.description}
+                    {formatString(selectedItem.description)}
                   </motion.div>
                 )
               );
