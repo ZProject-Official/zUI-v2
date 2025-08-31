@@ -7,12 +7,7 @@
   justify-content: space-between;
   box-sizing: border-box;
   padding: 0 3.5%;
-  opacity: 0.4;
   transition: opacity 0.5s ease-in-out;
-
-  &.selected {
-    opacity: 1;
-  }
 
   .left {
     display: flex;
