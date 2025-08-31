@@ -27,6 +27,7 @@ const Layout: FC<LayoutProps> = ({
 
   useEffect(() => {
     setPosition(defaultPos);
+    console.log("defaultPos changed", JSON.stringify(defaultPos));
   }, [defaultPos]);
 
   const updateSize = () => {

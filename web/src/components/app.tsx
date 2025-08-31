@@ -77,7 +77,7 @@ const initialFeatures: Feature[] = [
   },
   {
     name: "info",
-    defaultPos: { x: 70, y: 25 },
+    defaultPos: { x: 750, y: 25 },
     component: (editMod: boolean) => <Info editMod={editMod} />,
     selected: false,
   },
