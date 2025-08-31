@@ -143,7 +143,6 @@ const Info: FC<{ editMod: boolean }> = ({ editMod }) => {
                     }
                   case "image":
                     return <Image {...info} />;
-                    return null;
                 }
               })}
             </div>

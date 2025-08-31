@@ -419,229 +419,248 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     }
   });
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (!items) return;
-      if (editMod) return;
+  const keyIntervals = useRef<Map<string, number>>(new Map());
 
-      const currentTime = Date.now();
-      const lastPress = lastKeyPress.current;
-
-      if (lastPress.key !== event.key) {
-        lastKeyPress.current = { key: event.key, timestamp: currentTime };
-        processKeyPress(event);
-        return;
-      }
-
-      if (
-        currentTime - lastPress.timestamp <
-        (information?.theme.menu.keyPressDelay ?? 150)
-      ) {
-        return;
-      }
-
-      lastKeyPress.current = { key: event.key, timestamp: currentTime };
-      processKeyPress(event);
-    };
-
-    const processKeyPress = (event: KeyboardEvent) => {
-      if (!items) return;
-      if (!visible) return;
-      let item = items[usableItems[index - 1]];
-      let id = index - 1;
-      switch (event.key) {
-        case "ArrowUp":
-          if (
-            !document.activeElement?.classList.contains("content") &&
-            !document.activeElement?.classList.contains("search-bar")
-          ) {
-            let lastIndex = index;
-            let newIndex;
-            if (index > 1) {
-              newIndex = index - 1;
-              if (id <= 1 && usableItems[id] > 1) {
-                setMask({ start: 0, end: maxVisibleItems - 1 });
-              } else if (usableItems[id] <= mask.start) {
-                setMask({ start: mask.start - 1, end: mask.end - 1 });
-              }
-            } else {
-              newIndex = numOfItems || 1;
+  const processKeyPress = (event: KeyboardEvent) => {
+    if (!items) return;
+    let item = items[usableItems[index - 1]];
+    let id = index - 1;
+    switch (event.key) {
+      case "ArrowUp":
+        if (
+          !document.activeElement?.classList.contains("content") &&
+          !document.activeElement?.classList.contains("search-bar")
+        ) {
+          let lastIndex = index;
+          let newIndex;
+          if (index > 1) {
+            newIndex = index - 1;
+            if (id <= 1 && usableItems[id] > 1) {
+              setMask({ start: 0, end: maxVisibleItems - 1 });
+            } else if (usableItems[id] <= mask.start) {
+              setMask({ start: mask.start - 1, end: mask.end - 1 });
+            }
+          } else {
+            newIndex = numOfItems || 1;
+            setMask({
+              start: Math.max(0, (items?.length ?? 0) - maxVisibleItems),
+              end: (items?.length ?? 0) - 1,
+            });
+          }
+          setIndex(newIndex);
+          if (lastIndex !== newIndex) {
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
+            }
+          }
+        }
+        break;
+      case "ArrowDown":
+        if (
+          !document.activeElement?.classList.contains("content") &&
+          !document.activeElement?.classList.contains("search-bar")
+        ) {
+          let lastIndex = index;
+          let newIndex;
+          if (index < numOfItems) {
+            newIndex = index + 1;
+            if (
+              id + 1 == usableItems.length - 1 &&
+              usableItems[id] < (items?.length ?? maxVisibleItems)
+            ) {
               setMask({
                 start: Math.max(0, (items?.length ?? 0) - maxVisibleItems),
                 end: (items?.length ?? 0) - 1,
               });
+            } else if (usableItems[id] >= mask.end) {
+              setMask({ start: mask.start + 1, end: mask.end + 1 });
             }
-            setIndex(newIndex);
-            if (lastIndex !== newIndex) {
-              if (information?.theme.menu.sound) {
-                SendMessage("sounds:play", { sound: "switch" });
-              }
+          } else {
+            newIndex = 1;
+            setMask({ start: 0, end: maxVisibleItems - 1 });
+          }
+          setIndex(newIndex);
+          if (lastIndex !== newIndex) {
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
             }
           }
-          break;
-        case "ArrowDown":
-          if (
-            !document.activeElement?.classList.contains("content") &&
-            !document.activeElement?.classList.contains("search-bar")
-          ) {
-            let lastIndex = index;
-            let newIndex;
-            if (index < numOfItems) {
-              newIndex = index + 1;
-              if (
-                id + 1 == usableItems.length - 1 &&
-                usableItems[id] < (items?.length ?? maxVisibleItems)
-              ) {
-                setMask({
-                  start: Math.max(0, (items?.length ?? 0) - maxVisibleItems),
-                  end: (items?.length ?? 0) - 1,
-                });
-              } else if (usableItems[id] >= mask.end) {
-                setMask({ start: mask.start + 1, end: mask.end + 1 });
-              }
-            } else {
-              newIndex = 1;
-              setMask({ start: 0, end: maxVisibleItems - 1 });
-            }
-            setIndex(newIndex);
-            if (lastIndex !== newIndex) {
-              if (information?.theme.menu.sound) {
-                SendMessage("sounds:play", { sound: "switch" });
-              }
-            }
-          }
-          break;
-        case "ArrowRight":
-          if (item.type === "list" && item.index !== undefined && item.items) {
-            if (information?.theme.menu.sound) {
-              SendMessage("sounds:play", { sound: "switch" });
-            }
-            fetchNui("menu:useItem", {
-              type: item.type,
-              itemId: item.itemId,
-              listChange: true,
-              index: item.index < item.items.length ? item.index + 1 : 1,
-            });
-          } else if (
-            item.type === "colorslist" &&
-            item.index !== undefined &&
-            item.colors
-          ) {
-            if (information?.theme.menu.sound) {
-              SendMessage("sounds:play", { sound: "switch" });
-            }
-            fetchNui("menu:useItem", {
-              type: item.type,
-              itemId: item.itemId,
-              listChange: true,
-              index: item.index < item.colors.length ? item.index + 1 : 1,
-            });
-          } else if (
-            item.type === "slider" &&
-            item.percentage !== undefined &&
-            item.step !== undefined
-          ) {
-            if (information?.theme.menu.sound) {
-              SendMessage("sounds:play", { sound: "switch" });
-            }
-            fetchNui("menu:useItem", {
-              type: item.type,
-              itemId: item.itemId,
-              percentageChange: true,
-              percentage: Math.min(100, item.percentage + item.step),
-            });
-          }
-
-          break;
-        case "ArrowLeft":
-          if (item.type === "list" && item.index !== undefined && item.items) {
-            if (information?.theme.menu.sound) {
-              SendMessage("sounds:play", { sound: "switch" });
-            }
-            fetchNui("menu:useItem", {
-              type: item.type,
-              itemId: item.itemId,
-              listChange: true,
-              index: item.index === 1 ? item.items.length : item.index - 1,
-            });
-          } else if (
-            item.type === "colorslist" &&
-            item.index !== undefined &&
-            item.colors
-          ) {
-            if (information?.theme.menu.sound) {
-              SendMessage("sounds:play", { sound: "switch" });
-            }
-
-            fetchNui("menu:useItem", {
-              type: item.type,
-              itemId: item.itemId,
-              listChange: true,
-              index: item.index === 1 ? item.colors.length : item.index - 1,
-            });
-          } else if (
-            item.type === "slider" &&
-            item.percentage !== undefined &&
-            item.step !== undefined
-          ) {
-            if (information?.theme.menu.sound) {
-              SendMessage("sounds:play", { sound: "switch" });
-            }
-
-            fetchNui("menu:useItem", {
-              type: item.type,
-              itemId: item.itemId,
-              percentageChange: true,
-              percentage: Math.max(0, item.percentage - item.step),
-            });
-          }
-
-          break;
-        case "Enter":
+        }
+        break;
+      case "ArrowRight":
+        if (item.type === "list" && item.index !== undefined && item.items) {
           if (information?.theme.menu.sound) {
-            SendMessage("sounds:play", { sound: "enter" });
+            SendMessage("sounds:play", { sound: "switch" });
           }
-          if (items) {
-            if (item.type === "linkbutton") {
-              //@ts-ignore
-              window.invokeNative("openUrl", item.link);
-            } else if (item.type === "textarea") {
-              SendMessage("textArea:focus", { itemId: item.itemId });
-            } else if (item.type === "searchbar") {
-              SendMessage("searchBar:focus", { itemId: item.itemId });
-            } else if (item.type === "colorpicker") {
-              SendMessage("colorPicker:focus", { itemId: item.itemId });
-            } else if (item.type === "list" || item.type === "colorlist") {
-              fetchNui("menu:useItem", {
-                itemId: item.itemId,
-                type: item.type,
-                index: item.index,
-              });
-            } else {
-              fetchNui("menu:useItem", {
-                itemId: item.itemId,
-                type: item.type,
-              });
-            }
+          fetchNui("menu:useItem", {
+            type: item.type,
+            itemId: item.itemId,
+            listChange: true,
+            index: item.index < item.items.length ? item.index + 1 : 1,
+          });
+        } else if (
+          item.type === "colorslist" &&
+          item.index !== undefined &&
+          item.colors
+        ) {
+          if (information?.theme.menu.sound) {
+            SendMessage("sounds:play", { sound: "switch" });
           }
+          fetchNui("menu:useItem", {
+            type: item.type,
+            itemId: item.itemId,
+            listChange: true,
+            index: item.index < item.colors.length ? item.index + 1 : 1,
+          });
+        } else if (
+          item.type === "slider" &&
+          item.percentage !== undefined &&
+          item.step !== undefined
+        ) {
+          if (information?.theme.menu.sound) {
+            SendMessage("sounds:play", { sound: "switch" });
+          }
+          fetchNui("menu:useItem", {
+            type: item.type,
+            itemId: item.itemId,
+            percentageChange: true,
+            percentage: Math.min(100, item.percentage + item.step),
+          });
+        }
+
+        break;
+      case "ArrowLeft":
+        if (item.type === "list" && item.index !== undefined && item.items) {
+          if (information?.theme.menu.sound) {
+            SendMessage("sounds:play", { sound: "switch" });
+          }
+          fetchNui("menu:useItem", {
+            type: item.type,
+            itemId: item.itemId,
+            listChange: true,
+            index: item.index === 1 ? item.items.length : item.index - 1,
+          });
+        } else if (
+          item.type === "colorslist" &&
+          item.index !== undefined &&
+          item.colors
+        ) {
+          if (information?.theme.menu.sound) {
+            SendMessage("sounds:play", { sound: "switch" });
+          }
+
+          fetchNui("menu:useItem", {
+            type: item.type,
+            itemId: item.itemId,
+            listChange: true,
+            index: item.index === 1 ? item.colors.length : item.index - 1,
+          });
+        } else if (
+          item.type === "slider" &&
+          item.percentage !== undefined &&
+          item.step !== undefined
+        ) {
+          if (information?.theme.menu.sound) {
+            SendMessage("sounds:play", { sound: "switch" });
+          }
+
+          fetchNui("menu:useItem", {
+            type: item.type,
+            itemId: item.itemId,
+            percentageChange: true,
+            percentage: Math.max(0, item.percentage - item.step),
+          });
+        }
+
+        break;
+      case "Enter":
+        if (information?.theme.menu.sound) {
+          SendMessage("sounds:play", { sound: "enter" });
+        }
+        if (items) {
+          if (item.type === "linkbutton") {
+            //@ts-ignore
+            window.invokeNative("openUrl", item.link);
+          } else if (item.type === "textarea") {
+            SendMessage("textArea:focus", { itemId: item.itemId });
+          } else if (item.type === "searchbar") {
+            SendMessage("searchBar:focus", { itemId: item.itemId });
+          } else if (item.type === "colorpicker") {
+            SendMessage("colorPicker:focus", { itemId: item.itemId });
+          } else if (item.type === "list" || item.type === "colorlist") {
+            fetchNui("menu:useItem", {
+              itemId: item.itemId,
+              type: item.type,
+              index: item.index,
+            });
+          } else {
+            fetchNui("menu:useItem", {
+              itemId: item.itemId,
+              type: item.type,
+            });
+          }
+        }
+        break;
+      case "Backspace":
+        if (
+          !document.activeElement?.classList.contains("content") &&
+          !document.activeElement?.classList.contains("search-bar")
+        ) {
+          if (information?.theme.menu.sound) {
+            SendMessage("sounds:play", { sound: "backspace" });
+          }
+          fetchNui("menu:goBack");
           break;
-        case "Backspace":
-          if (
-            !document.activeElement?.classList.contains("content") &&
-            !document.activeElement?.classList.contains("search-bar")
-          ) {
-            if (information?.theme.menu.sound) {
-              SendMessage("sounds:play", { sound: "backspace" });
-            }
-            fetchNui("menu:goBack");
-            break;
-          }
+        }
+    }
+  };
+
+  useEffect(() => {
+    const validKeys = [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+      "Enter",
+      "Backspace",
+    ];
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      event.preventDefault();
+      if (!validKeys.includes(event.key)) return;
+      if (!items || !visible) return;
+      if (keyIntervals.current.has(event.key)) return;
+
+      const pressedKey = event.key;
+
+      processKeyPress({ key: pressedKey } as KeyboardEvent);
+
+      const interval = window.setInterval(() => {
+        processKeyPress({ key: pressedKey } as KeyboardEvent);
+      }, information?.theme.menu.keyPressDelay ?? 150);
+
+      keyIntervals.current.set(pressedKey, interval);
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      event.preventDefault();
+      if (!validKeys.includes(event.key)) return;
+      if (!items || !visible) return;
+
+      const interval = keyIntervals.current.get(event.key);
+      if (interval) {
+        clearInterval(interval);
+        keyIntervals.current.delete(event.key);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      keyIntervals.current.forEach((interval) => clearInterval(interval));
+      keyIntervals.current.clear();
     };
   }, [numOfItems, index, items]);
 
@@ -652,6 +671,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     setIndex(1);
     fetchNui("menu:closed");
   };
+
   useNuiEvent<infoProps>(
     "menu:show",
     ({ title, subtitle, description, banner, theme }) => {

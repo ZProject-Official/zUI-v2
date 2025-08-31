@@ -12,7 +12,7 @@
       "entry": "zoomIn",
       "exit": "slideOutVertical",
       "onSwitch": true,
-      "onScroll": true
+      "onScroll": false
     },
     "colors": {
       "primary": "#FF3837",
