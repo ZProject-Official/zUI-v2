@@ -15,8 +15,6 @@
     padding: 2.5%;
 
     #title {
-      text-align: left;
-      white-space: nowrap;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -26,11 +24,8 @@
       font-size: 150%;
       width: 100%;
       font-weight: 400;
-
     }
     #subtitle {
-      text-align: right;
-      white-space: nowrap;
       display: flex;
       flex-direction: column;
       align-items: center;
