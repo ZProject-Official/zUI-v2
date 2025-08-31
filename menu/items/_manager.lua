@@ -36,14 +36,7 @@ local function handleItemAction(actionTable, data)
 
     if data.type == "button" then
         action(true)
-        if nextMenu and MENUS[nextMenu] then
-            MENUS[CURRENT_MENU].visible = false
-            TriggerNuiEvent("menu:setIndexHistory", {
-                lastMenu = CURRENT_MENU,
-                newMenu = nextMenu
-            })
-            zUI.SetVisible(nextMenu, true)
-        end
+        zUI.Goto(nextMenu)
     elseif data.type == "checkbox" then
         action(true)
     elseif data.type == "list" or data.type == "colorslist" then

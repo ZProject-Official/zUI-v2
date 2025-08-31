@@ -129,3 +129,7 @@ RegisterNuiCallback("menu:closed", function(data, cb)
     end
     cb("ok ;)")
 end)
+
+RegisterNuiCallback("zUI:getTheme", function(data, cb)
+    cb(zUI.GetTheme("default"))
+end)

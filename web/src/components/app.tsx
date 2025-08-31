@@ -26,6 +26,8 @@ export interface themeProps {
       onSwitch: boolean;
       onScroll: boolean;
     };
+    keyPressDelay: number;
+    sound: boolean;
     colors: {
       primary: string;
       background: string;
@@ -51,6 +53,10 @@ export interface themeProps {
       background: string;
     };
     font: string;
+  };
+  editMod: {
+    menu: boolean;
+    info: boolean;
   };
 }
 
@@ -176,7 +182,7 @@ const App: FC = () => {
 
   return (
     <div
-      id='app'
+      id="app"
       style={{
         background: `${editMod ? "rgba(0, 0, 0, 0.5)" : "transparent"}`,
       }}
@@ -204,19 +210,19 @@ const App: FC = () => {
         );
       })}
       {editMod && (
-        <div id='save' onClick={handleSave}>
+        <div id="save" onClick={handleSave}>
           <svg
-            width='8'
-            height='8'
-            viewBox='0 0 8 8'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
+            width="8"
+            height="8"
+            viewBox="0 0 8 8"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              fill-rule='evenodd'
-              clip-rule='evenodd'
-              d='M4.5 1.25C4.5 1.11175 4.612 1 4.75 1C4.888 1 5 1.11175 5 1.25V2.25C5 2.38825 4.888 2.5 4.75 2.5C4.612 2.5 4.5 2.38825 4.5 2.25V1.25ZM2.25 3H5.75C5.888 3 6 2.88825 6 2.75V0H2V2.75C2 2.88825 2.112 3 2.25 3ZM7 0H6.5V3C6.5 3.276 6.276 3.5 6 3.5H2C1.724 3.5 1.5 3.276 1.5 3V0H1C0.44775 0 0 0.44775 0 1V7C0 7.55225 0.44775 8 1 8H7C7.55225 8 8 7.55225 8 7V1C8 0.44775 7.55225 0 7 0Z'
-              fill='white'
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M4.5 1.25C4.5 1.11175 4.612 1 4.75 1C4.888 1 5 1.11175 5 1.25V2.25C5 2.38825 4.888 2.5 4.75 2.5C4.612 2.5 4.5 2.38825 4.5 2.25V1.25ZM2.25 3H5.75C5.888 3 6 2.88825 6 2.75V0H2V2.75C2 2.88825 2.112 3 2.25 3ZM7 0H6.5V3C6.5 3.276 6.276 3.5 6 3.5H2C1.724 3.5 1.5 3.276 1.5 3V0H1C0.44775 0 0 0.44775 0 1V7C0 7.55225 0.44775 8 1 8H7C7.55225 8 8 7.55225 8 7V1C8 0.44775 7.55225 0 7 0Z"
+              fill="white"
             />
           </svg>
         </div>

@@ -1,4 +1,4 @@
-import { FC, useState, useRef } from "react";
+import { FC, useState, useRef, useEffect } from "react";
 import { useNuiEvent } from "../../../utils/useNuiEvent";
 import { themeProps } from "../../app";
 import { AnimatePresence, motion } from "framer-motion";
@@ -8,6 +8,7 @@ import Percent from "./infos/percent/percent";
 import Image from "./infos/image/image";
 
 import "./info.scss";
+import { fetchNui } from "../../../utils/fetchNui";
 
 interface infoProps {
   type: "text" | "percent" | "image";
@@ -81,13 +82,22 @@ const Info: FC<{ editMod: boolean }> = ({ editMod }) => {
 
   const defaultAnimations = { entry: "fadeIn", exit: "fadeOut" };
 
+  useEffect(() => {
+    if (!theme) {
+      fetchNui<themeProps>("zUI:getTheme").then((response) => {
+        console.log("Fetched theme:", response);
+        setTheme(response);
+      });
+    }
+  }, [editMod]);
+
   return (
     <AnimatePresence>
-      {visible && (
-        <div id='info-wrapper'>
+      {(visible || (theme?.editMod.info && editMod)) && (
+        <div id="info-wrapper">
           <motion.div
             ref={infoRef}
-            id='info-container'
+            id="info-container"
             initial={
               getAnimation(theme?.info.animations ?? defaultAnimations)
                 .initialAnim
@@ -106,9 +116,9 @@ const Info: FC<{ editMod: boolean }> = ({ editMod }) => {
               boxShadow: `${theme?.menu.shadow ? "0 0 10px black" : "none"}`,
             }}
           >
-            <h1 id='title'>{!editMod ? title : "Title"}</h1>
-            <h1 id='subtitle'>{!editMod ? subtitle : "Subtitle"}</h1>
-            <div id='infos'>
+            <h1 id="title">{!editMod ? title : "Title"}</h1>
+            <h1 id="subtitle">{!editMod ? subtitle : "Subtitle"}</h1>
+            <div id="infos">
               {(!editMod
                 ? infos
                 : [

@@ -18,5 +18,7 @@
   #img {
     width: 100%;
     border-radius: 0.25rem;
+    user-select: none;
+    -webkit-user-drag: none;
   }
 }

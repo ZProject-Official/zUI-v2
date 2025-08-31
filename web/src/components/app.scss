@@ -3,6 +3,8 @@
   width: 100vw;
   height: 100vh;
   transition: 0.5s;
+  // Thanks to Kamionn pr
+  will-change: background;
 
   #save {
     position: absolute;
@@ -23,6 +25,8 @@
 
     &:hover {
       box-shadow: 0 0 10px #ff3837;
+      // Thanks to Kamionn pr
+      will-change: box-shadow;
     }
 
     svg {

@@ -433,11 +433,10 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
         return;
       }
 
-      if (currentTime - lastPress.timestamp < 250) {
-        return;
-      }
-
-      if (currentTime - lastPress.timestamp < 100) {
+      if (
+        currentTime - lastPress.timestamp <
+        (information?.theme.menu.keyPressDelay ?? 150)
+      ) {
         return;
       }
 
@@ -474,7 +473,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             }
             setIndex(newIndex);
             if (lastIndex !== newIndex) {
-              SendMessage("sounds:play", { sound: "switch" });
+              if (information?.theme.menu.sound) {
+                SendMessage("sounds:play", { sound: "switch" });
+              }
             }
           }
           break;
@@ -504,13 +505,17 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             }
             setIndex(newIndex);
             if (lastIndex !== newIndex) {
-              SendMessage("sounds:play", { sound: "switch" });
+              if (information?.theme.menu.sound) {
+                SendMessage("sounds:play", { sound: "switch" });
+              }
             }
           }
           break;
         case "ArrowRight":
           if (item.type === "list" && item.index !== undefined && item.items) {
-            SendMessage("sounds:play", { sound: "switch" });
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
+            }
             fetchNui("menu:useItem", {
               type: item.type,
               itemId: item.itemId,
@@ -522,7 +527,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             item.index !== undefined &&
             item.colors
           ) {
-            SendMessage("sounds:play", { sound: "switch" });
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
+            }
             fetchNui("menu:useItem", {
               type: item.type,
               itemId: item.itemId,
@@ -534,7 +541,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             item.percentage !== undefined &&
             item.step !== undefined
           ) {
-            SendMessage("sounds:play", { sound: "switch" });
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
+            }
             fetchNui("menu:useItem", {
               type: item.type,
               itemId: item.itemId,
@@ -546,7 +555,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
           break;
         case "ArrowLeft":
           if (item.type === "list" && item.index !== undefined && item.items) {
-            SendMessage("sounds:play", { sound: "switch" });
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
+            }
             fetchNui("menu:useItem", {
               type: item.type,
               itemId: item.itemId,
@@ -558,7 +569,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             item.index !== undefined &&
             item.colors
           ) {
-            SendMessage("sounds:play", { sound: "switch" });
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
+            }
 
             fetchNui("menu:useItem", {
               type: item.type,
@@ -571,7 +584,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             item.percentage !== undefined &&
             item.step !== undefined
           ) {
-            SendMessage("sounds:play", { sound: "switch" });
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "switch" });
+            }
 
             fetchNui("menu:useItem", {
               type: item.type,
@@ -583,7 +598,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
 
           break;
         case "Enter":
-          SendMessage("sounds:play", { sound: "enter" });
+          if (information?.theme.menu.sound) {
+            SendMessage("sounds:play", { sound: "enter" });
+          }
           if (items) {
             if (item.type === "linkbutton") {
               //@ts-ignore
@@ -613,7 +630,9 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             !document.activeElement?.classList.contains("content") &&
             !document.activeElement?.classList.contains("search-bar")
           ) {
-            SendMessage("sounds:play", { sound: "backspace" });
+            if (information?.theme.menu.sound) {
+              SendMessage("sounds:play", { sound: "backspace" });
+            }
             fetchNui("menu:goBack");
             break;
           }
@@ -678,6 +697,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
       }
 
       setMask({ start: 0, end: theme.menu.maxVisibleItems - 1 });
+      setIndex(1);
       setVisible(true);
     }
   );
@@ -753,11 +773,11 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
 
   return (
     <AnimatePresence>
-      {visible && (
-        <div id='menu-wrapper'>
+      {(visible || (information?.theme.editMod.menu && editMod)) && (
+        <div id="menu-wrapper">
           <motion.div
             ref={menuRef}
-            id='menu-container'
+            id="menu-container"
             initial={
               getAnimation(
                 information?.theme.menu.animations ?? defaultAnimations
@@ -793,7 +813,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
           >
             {information?.theme.menu.displayBanner && (
               <div
-                id='banner'
+                id="banner"
                 style={
                   isUrl(information?.banner)
                     ? {
@@ -824,15 +844,15 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                 }
               >
                 {isUrl(information?.banner) && (
-                  <img src={information?.banner} alt='banner' id='image' />
+                  <img src={information?.banner} alt="banner" id="image" />
                 )}
-                <div id='titles'>
+                <div id="titles">
                   {information?.title && information?.title.length > 0 && (
-                    <h1 id='title'>{formatString(information?.title)}</h1>
+                    <h1 id="title">{formatString(information?.title)}</h1>
                   )}
                   {information?.subtitle &&
                     information?.subtitle.length > 0 && (
-                      <h1 id='subtitle'>
+                      <h1 id="subtitle">
                         {formatString(information?.subtitle)}
                       </h1>
                     )}
@@ -841,7 +861,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             )}
             {information?.theme.menu.displayInformations && (
               <div
-                id='infos'
+                id="infos"
                 style={
                   information?.theme.menu.margin
                     ? {
@@ -855,18 +875,18 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
               >
                 {information?.description &&
                   information?.description?.length > 0 && (
-                    <h1 id='description'>
+                    <h1 id="description">
                       {formatString(information?.description)}
                     </h1>
                   )}
-                <h1 id='counter'>
+                <h1 id="counter">
                   {index}/{numOfItems}
                 </h1>
               </div>
             )}
             {items && items.length > 0 && (
               <div
-                id='items-container'
+                id="items-container"
                 style={
                   information?.theme.menu.margin
                     ? {
@@ -880,7 +900,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                 }
               >
                 <span
-                  id='hover-bar'
+                  id="hover-bar"
                   style={
                     information?.theme.menu.colors.itemSelected
                       ? {
@@ -905,17 +925,17 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                         ? listVariants
                         : {}
                     }
-                    initial='initial'
-                    animate='animate'
-                    exit='exit'
-                    id='items'
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    id="items"
                   >
                     {items.map((item, i) => {
                       if (i >= mask.start && i <= mask.end) {
                         const isSelected = i === usableItems[index - 1];
                         return (
                           <motion.div
-                            className='item'
+                            className="item"
                             key={item.itemId}
                             variants={
                               information?.theme.menu.animations.onSwitch
@@ -936,12 +956,12 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                     })}
                   </motion.div>
                 </AnimatePresence>
-                <div id='description'></div>
+                <div id="description"></div>
               </div>
             )}
             {information?.theme.menu.displayControlsIndicator && (
               <div
-                id='indicator'
+                id="indicator"
                 style={
                   information?.theme.menu.margin
                     ? {
@@ -954,17 +974,17 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                 }
               >
                 <svg
-                  width='12'
-                  height='21'
-                  viewBox='0 0 12 21'
-                  fill='none'
-                  xmlns='http://www.w3.org/2000/svg'
+                  width="12"
+                  height="21"
+                  viewBox="0 0 12 21"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    d='M1 14L6 19L11 14M11 7L6 2L1 7'
-                    stroke='white'
-                    stroke-width='2'
-                    stroke-linecap='round'
+                    d="M1 14L6 19L11 14M11 7L6 2L1 7"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
                   />
                 </svg>
               </div>
@@ -979,7 +999,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                 selectedItem.description &&
                 selectedItem.description.length > 0 && (
                   <motion.div
-                    id='description'
+                    id="description"
                     key={selectedItem.description}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}

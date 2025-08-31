@@ -23,6 +23,8 @@
       "itemSelected": "#FF3837",
       "banner": "#FF3837"
     },
+    "keyPressDelay": 100,
+    "sound": true,
     "font": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
     "maxVisibleItems": 10
   },
@@ -39,5 +41,9 @@
       "background": "rgba(18, 18, 18, 0.5)"
     },
     "font": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+  },
+  "editMod": {
+    "menu": true,
+    "info": true
   }
 }

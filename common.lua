@@ -15,8 +15,13 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNuiCallback("app:savePositions", function(data, cb)
-    local positions = json.encode(data.positions)
-    SetResourceKvp("zUI:positions:MyPersonalPositions", positions)
+    if data and data.positions and type(data.positions) == "table" then
+        -- Thanks to @Kamionn pr
+        local success, positions = pcall(json.encode, data.positions)
+        if success and positions then
+            SetResourceKvp("zUI:positions:MyPersonalPositions", positions)
+        end
+    end
     cb("ok :)")
 end)
 
