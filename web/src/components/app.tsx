@@ -43,7 +43,7 @@ export interface themeProps {
   };
   info: {
     width: string;
-    cornerRadius: number;
+    cornersRadius: number;
     perspective: boolean;
     shadow: boolean;
     animations: {
