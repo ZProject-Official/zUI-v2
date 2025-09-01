@@ -111,9 +111,11 @@ const Info: FC<{ editMod: boolean }> = ({ editMod }) => {
               getAnimation(theme?.info.animations ?? defaultAnimations).exitAnim
             }
             style={{
-              borderRadius: `${theme?.menu.cornersRadius}em`,
-              background: `${theme?.menu.colors.background}`,
-              boxShadow: `${theme?.menu.shadow ? "0 0 10px black" : "none"}`,
+              minWidth: theme?.info.width ?? "20vw",
+              maxWidth: theme?.info.width ?? "20vw",
+              borderRadius: `${theme?.info.cornersRadius}em`,
+              background: `${theme?.info.colors.background}`,
+              boxShadow: `${theme?.info.shadow ? "0 0 10px black" : "none"}`,
             }}
           >
             <h1 id="title">{!editMod ? title : "Title"}</h1>

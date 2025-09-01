@@ -12,6 +12,7 @@ import Info from "./features/info/info";
 
 export interface themeProps {
   menu: {
+    width: string;
     displayBanner: boolean;
     displayInformations: boolean;
     displayControlsIndicator: boolean;
@@ -41,6 +42,7 @@ export interface themeProps {
     maxVisibleItems: number;
   };
   info: {
+    width: string;
     cornerRadius: number;
     perspective: boolean;
     shadow: boolean;

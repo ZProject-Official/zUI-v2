@@ -1,5 +1,6 @@
 {
   "menu": {
+    "width": "20vw",
     "displayBanner": true,
     "displayInformations": true,
     "displayControlsIndicator": true,
@@ -29,6 +30,7 @@
     "maxVisibleItems": 10
   },
   "info": {
+    "width": "20vw",
     "cornerRadius": 0.5,
     "perspective": true,
     "shadow": true,

@@ -822,6 +822,8 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             style={
               !information?.theme.menu.margin
                 ? {
+                    minWidth: information?.theme.menu.width ?? "20vw",
+                    maxWidth: information?.theme.menu.width ?? "20vw",
                     borderRadius: `${information?.theme.menu.cornersRadius}em`,
                     background: `${information?.theme.menu.colors.background}`,
                     boxShadow: `${
@@ -829,6 +831,8 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                     }`,
                   }
                 : {
+                    minWidth: information?.theme.menu.width ?? "20vw",
+                    maxWidth: information?.theme.menu.width ?? "20vw",
                     gap: "1vh",
                     boxShadow: `${
                       information?.theme.menu.shadow ? "0 0 10px black" : "none"
