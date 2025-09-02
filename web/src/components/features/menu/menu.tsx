@@ -615,6 +615,12 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     }
   };
 
+  const processKeyPressRef = useRef(processKeyPress);
+
+  useEffect(() => {
+    processKeyPressRef.current = processKeyPress;
+  });
+
   useEffect(() => {
     const validKeys = [
       "ArrowUp",
@@ -628,20 +634,19 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     const handleKeyDown = (event: KeyboardEvent) => {
       event.preventDefault();
       if (!validKeys.includes(event.key)) return;
-      if (!items || !visible) return;
       if (keyIntervals.current.has(event.key)) return;
 
       const pressedKey = event.key;
 
-      processKeyPress({ key: pressedKey } as KeyboardEvent);
+      processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
 
       const delay =
-        pressedKey === "Enter" || pressedKey === "Backspace"
+        (pressedKey === "Enter" || pressedKey === "Backspace"
           ? 250
-          : information?.theme.menu.keyPressDelay ?? 150;
+          : information?.theme.menu.keyPressDelay ?? 150) * 0.4;
 
       const interval = window.setInterval(() => {
-        processKeyPress({ key: pressedKey } as KeyboardEvent);
+        processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
       }, delay);
 
       keyIntervals.current.set(pressedKey, interval);
@@ -650,7 +655,6 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     const handleKeyUp = (event: KeyboardEvent) => {
       event.preventDefault();
       if (!validKeys.includes(event.key)) return;
-      if (!items || !visible) return;
 
       const interval = keyIntervals.current.get(event.key);
       if (interval) {
@@ -661,13 +665,21 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
       keyIntervals.current.forEach((interval) => clearInterval(interval));
       keyIntervals.current.clear();
     };
-  }, [numOfItems, index, items]);
+  }, []);
+
+  useEffect(() => {
+    if (!items || !visible) {
+      keyIntervals.current.forEach((interval) => clearInterval(interval));
+      keyIntervals.current.clear();
+    }
+  }, [items, visible]);
 
   const closeMenu = () => {
     setVisible(false);
