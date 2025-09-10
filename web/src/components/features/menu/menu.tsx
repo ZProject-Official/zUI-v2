@@ -639,11 +639,11 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
         return;
       } else {
         processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
-
+        console.log(JSON.stringify(information?.theme.menu.keyPressDelay));
         const delay =
           (pressedKey === "Backspace"
             ? 250
-            : information?.theme.menu.keyPressDelay ?? 150) * 0.4;
+            : information?.theme.menu.keyPressDelay || 150) * 0.4;
 
         const interval = window.setInterval(() => {
           processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
@@ -673,7 +673,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
       keyIntervals.current.forEach((interval) => clearInterval(interval));
       keyIntervals.current.clear();
     };
-  }, []);
+  }, [information?.theme.menu]);
 
   useEffect(() => {
     if (!items || !visible) {
