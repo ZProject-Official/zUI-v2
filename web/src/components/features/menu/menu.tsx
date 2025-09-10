@@ -311,10 +311,6 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     start: 0,
     end: maxVisibleItemsParam - 1,
   });
-  const lastKeyPress = useRef<{ key: string; timestamp: number }>({
-    key: "",
-    timestamp: 0,
-  });
   const menuPosition = useRef({ x: 0, y: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
   const [indexHistory, setIndexHistory] = useState<{
@@ -409,7 +405,6 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
               : undefined
           )
           .filter((item): item is number => item !== undefined) ?? [];
-      const nb = usable.length;
       const maxVisible = Math.min(
         maxVisibleItemsParam,
         items?.length ?? maxVisibleItemsParam
@@ -638,18 +633,24 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
 
       const pressedKey = event.key;
 
-      processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
-
-      const delay =
-        (pressedKey === "Enter" || pressedKey === "Backspace"
-          ? 250
-          : information?.theme.menu.keyPressDelay ?? 150) * 0.4;
-
-      const interval = window.setInterval(() => {
+      if (pressedKey === "Enter") {
+        if (event.repeat) return;
         processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
-      }, delay);
+        return;
+      } else {
+        processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
 
-      keyIntervals.current.set(pressedKey, interval);
+        const delay =
+          (pressedKey === "Backspace"
+            ? 250
+            : information?.theme.menu.keyPressDelay ?? 150) * 0.4;
+
+        const interval = window.setInterval(() => {
+          processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
+        }, delay);
+
+        keyIntervals.current.set(pressedKey, interval);
+      }
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
