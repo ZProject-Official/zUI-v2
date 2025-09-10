@@ -634,12 +634,16 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     ];
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (isEditableElement(event.target)) return;
+      const pressedKey = event.key;
+      if (isEditableElement(event.target)) {
+        if (pressedKey === "Enter") {
+          processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
+        }
+        return;
+      }
       event.preventDefault();
       if (!validKeys.includes(event.key)) return;
       if (keyIntervals.current.has(event.key)) return;
-
-      const pressedKey = event.key;
 
       if (pressedKey === "Enter") {
         if (event.repeat) return;
@@ -647,7 +651,6 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
         return;
       } else {
         processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
-        console.log(JSON.stringify(information?.theme.menu.keyPressDelay));
         const delay =
           (pressedKey === "Backspace"
             ? 250
