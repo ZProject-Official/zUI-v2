@@ -617,6 +617,13 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
   });
 
   useEffect(() => {
+    const isEditableElement = (el: EventTarget | null) => {
+      if (!(el instanceof HTMLElement)) return false;
+      const tag = el.tagName.toLowerCase();
+      const editable =
+        tag === "input" || tag === "textarea" || el.isContentEditable;
+      return editable;
+    };
     const validKeys = [
       "ArrowUp",
       "ArrowDown",
@@ -627,6 +634,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     ];
 
     const handleKeyDown = (event: KeyboardEvent) => {
+      if (isEditableElement(event.target)) return;
       event.preventDefault();
       if (!validKeys.includes(event.key)) return;
       if (keyIntervals.current.has(event.key)) return;
