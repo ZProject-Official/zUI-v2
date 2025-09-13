@@ -24,7 +24,7 @@
       "itemSelected": "#FF3837",
       "banner": "#FF3837"
     },
-    "keyPressDelay": 100,
+    "keyPressDelay": 300,
     "sound": true,
     "font": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
     "maxVisibleItems": 10

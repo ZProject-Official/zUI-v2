@@ -306,7 +306,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
   const [information, setInformation] = useState<infoProps | null>(null);
   const [items, setItems] = useState<itemProps[] | null>(null);
   const [index, setIndex] = useState<number>(1);
-  const maxVisibleItemsParam = information?.theme.menu.maxVisibleItems ?? 9;
+  const maxVisibleItemsParam = information?.theme.menu.maxVisibleItems ?? 8;
   const [mask, setMask] = useState<maskProps>({
     start: 0,
     end: maxVisibleItemsParam - 1,
@@ -759,6 +759,13 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     }
     if (!editMod) {
       setItems(items);
+      if (items.length - 1 - mask.start > mask.end) {
+        const max = information?.theme?.menu?.maxVisibleItems ?? 8;
+        setMask({
+          start: mask.start,
+          end: Math.min(items.length - 1, mask.start + max - 1),
+        });
+      }
     } else {
       setItems(debugData);
       setIndex(1);
