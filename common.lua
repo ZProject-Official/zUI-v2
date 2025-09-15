@@ -39,3 +39,53 @@ RegisterNuiCallback("app:manageEditMod", function(body, cb)
     end
     cb("ok :)")
 end)
+
+---@class ThemeAnimations
+---@field entry string
+---@field exit string
+---@field onSwitch? boolean
+---@field onScroll? boolean
+
+---@class ThemeColors
+---@field primary string
+---@field background string
+---@field description? string
+---@field informations? string
+---@field controlsIndicator? string
+---@field itemSelected? string
+---@field banner? string
+
+---@class ThemeMenu
+---@field width string
+---@field displayBanner boolean
+---@field displayInformations boolean
+---@field displayControlsIndicator boolean
+---@field cornersRadius number
+---@field perspective boolean
+---@field margin boolean
+---@field shadow boolean
+---@field hoverStyle string
+---@field animations ThemeAnimations
+---@field colors ThemeColors
+---@field keyPressDelay number
+---@field sound boolean
+---@field font string
+---@field maxVisibleItems number
+
+---@class ThemeInfo
+---@field width string
+---@field cornerRadius number
+---@field perspective boolean
+---@field shadow boolean
+---@field animations ThemeAnimations
+---@field colors ThemeColors
+---@field font string
+
+---@class ThemeEditMod
+---@field menu boolean
+---@field info boolean
+
+---@class Theme
+---@field menu ThemeMenu
+---@field info ThemeInfo
+---@field editMod ThemeEditMod
