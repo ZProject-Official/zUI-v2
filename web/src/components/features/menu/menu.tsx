@@ -581,7 +581,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
           } else if (item.type === "searchbar") {
             SendMessage("searchBar:focus", { itemId: item.itemId });
           } else if (item.type === "colorpicker") {
-            SendMessage("colorPicker:focus", { itemId: item.itemId });
+            SendMessage("colorpicker:focus", { itemId: item.itemId });
           } else if (item.type === "list" || item.type === "colorlist") {
             fetchNui("menu:useItem", {
               itemId: item.itemId,

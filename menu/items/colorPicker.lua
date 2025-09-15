@@ -30,7 +30,7 @@ zUI.ColorPicker = function(label, description, value, styles, action)
     return itemId
 end
 
-RegisterNuiCallback("menu:colorPicker:manageFocus", function(data, cb)
+RegisterNuiCallback("menu:colorpicker:manageFocus", function(data, cb)
     if data.state then
         SetNuiFocus(true, true)
         SetNuiFocusKeepInput(false)

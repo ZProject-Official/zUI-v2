@@ -2,9 +2,9 @@ import { FC, useState, useEffect, useRef } from "react";
 import BaseItem from "../baseItem/baseItem";
 
 import { fetchNui } from "../../../../../utils/fetchNui";
-import "./colorPicker.scss";
+import "./colorpicker.scss";
 
-interface colorPickerProps {
+interface colorpickerProps {
   label?: string;
   itemId?: string;
   value?: string;
@@ -15,48 +15,54 @@ interface colorPickerProps {
   isSelected?: boolean;
 }
 
-const ColorPicker: FC<colorPickerProps> = (data) => {
+const colorpicker: FC<colorpickerProps> = (data) => {
   const [value, setValue] = useState<string>(data.value ?? "grey");
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const pickerRef = useRef<HTMLInputElement>(null);
 
+  const hasAppliedRef = useRef(false);
+
   useEffect(() => {
     const handleMessage = (e: any) => {
-      let event = e.data;
-      if (
-        event.type === "colorPicker:focus" &&
-        event.data.itemId === data.itemId
-      ) {
-        fetchNui("menu:colorPicker:manageFocus", { state: !isFocused });
+      const event = e.data;
+      if (event.type === "colorpicker:focus" && event.data.itemId === data.itemId) {
+        const nextState = !isFocused;
+        fetchNui("menu:colorpicker:manageFocus", { state: nextState });
+
         if (!isFocused) {
+          hasAppliedRef.current = false;
           pickerRef.current?.click();
         } else {
-          fetchNui("menu:useItem", {
-            type: "colorPicker",
-            itemId: data.itemId,
-            value: value,
-          });
+          if (!hasAppliedRef.current) {
+            hasAppliedRef.current = true;
+            fetchNui("menu:useItem", {
+              type: "colorpicker",
+              itemId: data.itemId,
+              value: value,
+            });
+          }
         }
-        setIsFocused(!isFocused);
+
+        setIsFocused(nextState);
       }
     };
+
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
   }, [data.itemId, isFocused, value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        isFocused &&
-        pickerRef.current &&
-        !pickerRef.current.contains(event.target as Node)
-      ) {
-        fetchNui("menu:colorPicker:manageFocus", { state: false });
-        fetchNui("menu:useItem", {
-          type: "colorpicker",
-          itemId: data.itemId,
-          value: value,
-        });
+      if (isFocused && pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
+        fetchNui("menu:colorpicker:manageFocus", { state: false });
+        if (!hasAppliedRef.current) {
+          hasAppliedRef.current = true;
+          fetchNui("menu:useItem", {
+            type: "colorpicker",
+            itemId: data.itemId,
+            value: value,
+          });
+        }
         setIsFocused(false);
       }
     };
@@ -64,22 +70,61 @@ const ColorPicker: FC<colorPickerProps> = (data) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFocused, data.itemId, value]);
 
+  useEffect(() => {
+    const input = pickerRef.current;
+    if (!input) return;
+
+    const onChange = (e: Event) => {
+      const newVal = (e.target as HTMLInputElement).value;
+      setValue(newVal);
+      if (!hasAppliedRef.current) {
+        pickerRef.current?.blur();
+        hasAppliedRef.current = true;
+        fetchNui("menu:useItem", {
+          type: "colorpicker",
+          itemId: data.itemId,
+          value: newVal,
+        });
+        fetchNui("menu:colorpicker:manageFocus", { state: false });
+        setIsFocused(false);
+      }
+    };
+
+    const onBlur = () => {
+      setTimeout(() => {
+        if (!hasAppliedRef.current) {
+          const currentVal = input.value;
+          hasAppliedRef.current = true;
+          fetchNui("menu:useItem", {
+            type: "colorpicker",
+            itemId: data.itemId,
+            value: currentVal,
+          });
+          fetchNui("menu:colorpicker:manageFocus", { state: false });
+          setIsFocused(false);
+        }
+      }, 0);
+    };
+
+    input.addEventListener("change", onChange);
+    input.addEventListener("blur", onBlur);
+
+    return () => {
+      input.removeEventListener("change", onChange);
+      input.removeEventListener("blur", onBlur);
+    };
+  }, [data.itemId]);
+
   return (
     <BaseItem
       {...data}
       rightComponent={
         <div className="color-container">
-          <input
-            ref={pickerRef}
-            className="color"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            type="color"
-          />
+          <input ref={pickerRef} className="color" value={value} onChange={(e) => setValue(e.target.value)} type="color" />
         </div>
       }
     />
   );
 };
 
-export default ColorPicker;
+export default colorpicker;

@@ -19,7 +19,7 @@ zUI.CreateMenu = function(title, subtitle, description, theme, banner, key, mapp
     assert(mapping == nil or type(mapping) == "string", "Menu mapping must be a string or nil")
 
     local self = {}
-    self.id = ("zUI:MenuIdentifier:%s/%s"):format(MENU_COUNTER, math.random())
+    self.id = ("%s/zUI:MenuIdentifier:%s/%s"):format(GetInvokingResource(), MENU_COUNTER, math.random())
     MENU_COUNTER += 1
     self.title = title or ""
     self.subtitle = subtitle or ""
@@ -48,7 +48,7 @@ zUI.CreateSubMenu = function(parent, title, subtitle, description)
     assert(subtitle == nil or type(subtitle) == "string", "Menu subtitle must be a string or nil")
     assert(description == nil or type(description) == "string", "Menu description must be a string or nil")
     local self = {}
-    self.id = ("zUI:SubMenuIdentifier:%s/%s"):format(MENU_COUNTER, math.random())
+    self.id = ("%s/zUI:SubMenuIdentifier:%s/%s"):format(GetInvokingResource(), MENU_COUNTER, math.random())
     MENU_COUNTER += 1
     self.parent = parent
     self.title = title or ""
@@ -132,4 +132,16 @@ end)
 
 RegisterNuiCallback("zUI:getTheme", function(data, cb)
     cb(zUI.GetTheme("default"))
+end)
+
+AddEventHandler("onResourceStop", function(resource)
+    for key, _ in pairs(MENUS) do
+        if key:find(resource, 1, true) then
+            if zUI.IsVisible(key) then
+                zUI.SetVisible(key, false)
+                Citizen.Wait(500)
+            end
+            MENUS[key] = nil
+        end
+    end
 end)

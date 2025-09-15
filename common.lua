@@ -9,9 +9,13 @@ Citizen.CreateThread(function()
         Wait(100)
     until NetworkIsPlayerActive(PlayerId())
     local positions = json.decode(GetResourceKvpString("zUI:positions:MyPersonalPositions"))
-    if positions then
-        TriggerNuiEvent("app:setPositions", positions)
+    if not positions then
+        positions = {
+            ["menu"] = { x = 25, y = 25 },
+            ["info"] = { x = 750, y = 25 }
+        }
     end
+    TriggerNuiEvent("app:setPositions", positions)
 end)
 
 RegisterNuiCallback("app:savePositions", function(data, cb)
