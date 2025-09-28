@@ -9,7 +9,7 @@ zUI.SearchBar = function(description, value, placeholder, action)
 
     local itemIndex = #ITEMS + 1
     local itemId = ITEM_IDS[CURRENT_MENU] and ITEM_IDS[CURRENT_MENU][itemIndex] or
-    ("zUI:ActionIdentifier:%s/%s"):format(itemIndex, GetGameTimer())
+    ("{%s}/zUI:ActionIdentifier:%s/%s"):format(GetInvokingResource(), itemIndex, GetGameTimer())
 
     if not ITEM_IDS[CURRENT_MENU] then
         ITEM_IDS[CURRENT_MENU] = {}

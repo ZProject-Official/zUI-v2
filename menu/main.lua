@@ -145,4 +145,10 @@ AddEventHandler("onResourceStop", function(resource)
             MENUS[key] = nil
         end
     end
+    for key, _ in pairs(ACTIONS) do
+        local resourceFromKey = key:match("^{(.-)}")
+        if resourceFromKey == resource then
+            ACTIONS[key] = nil
+        end
+    end
 end)
