@@ -6,6 +6,9 @@ zUI.Goback = function()
     if current_menu.parent then
         MENUS[current_menu.id].visible = false
         MENUS[current_menu.parent].visible = true
+        if current_menu.closing then
+            current_menu.closing()
+        end
         TriggerNuiEvent("menu:show", {
             title = MENUS[current_menu.parent].title,
             subtitle = MENUS[current_menu.parent].subtitle,
