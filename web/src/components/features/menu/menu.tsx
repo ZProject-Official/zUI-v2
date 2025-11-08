@@ -379,7 +379,8 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             if (id <= 1 && usableItems[id] > 1) {
               setMask({ start: 0, end: maxVisibleItems - 1 });
             } else if (usableItems[id] <= mask.start) {
-              setMask({ start: mask.start - 1, end: mask.end - 1 });
+              console.log(id, mask.start - id, mask.start - (mask.start - id));
+              setMask({ start: mask.start - (mask.start + 1 - id), end: mask.end - (mask.start + 1 - id) });
             }
           } else {
             newIndex = numOfItems || 1;
@@ -407,8 +408,8 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                 start: Math.max(0, (items?.length ?? 0) - maxVisibleItems),
                 end: (items?.length ?? 0) - 1,
               });
-            } else if (usableItems[id] >= mask.end) {
-              setMask({ start: mask.start + 1, end: mask.end + 1 });
+            } else if (usableItems[id] + 1 >= mask.end) {
+              setMask({ start: mask.start + (usableItems[newIndex] - 1 - mask.end), end: mask.end + (usableItems[newIndex] - 1 - mask.end) });
             }
           } else {
             newIndex = 1;
