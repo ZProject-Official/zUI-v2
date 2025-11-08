@@ -252,42 +252,22 @@ const SendMessage = (type: string, data: {}) => {
   window.postMessage({ type: type, data }, "*");
 };
 
-function renderMenuItem(
-  item: itemProps,
-  i: number,
-  isSelected: boolean,
-  theme: themeProps | undefined
-) {
+function renderMenuItem(item: itemProps, i: number, isSelected: boolean, theme: themeProps | undefined) {
   switch (item.type) {
     case "line":
-      return (
-        <Line defaultColor={theme?.menu.colors.primary} colors={item.colors} />
-      );
+      return <Line defaultColor={theme?.menu.colors.primary} colors={item.colors} />;
     case "separator":
       return <Separator label={item.label} position={item.position} />;
     case "button":
       return <Button {...item} isSelected={isSelected} />;
     case "checkbox":
-      return (
-        <Checkbox
-          {...item}
-          color={theme?.menu.colors.primary}
-          state={item.state ?? false}
-          isSelected={isSelected}
-        />
-      );
+      return <Checkbox {...item} color={theme?.menu.colors.primary} state={item.state ?? false} isSelected={isSelected} />;
     case "linkbutton":
       return <LinkButton {...item} isSelected={isSelected} />;
     case "list":
       return <List {...item} isSelected={isSelected} />;
     case "slider":
-      return (
-        <Slider
-          {...item}
-          color={theme?.menu.colors.primary}
-          isSelected={isSelected}
-        />
-      );
+      return <Slider {...item} color={theme?.menu.colors.primary} isSelected={isSelected} />;
     case "textarea":
       return <TextArea {...item} isSelected={isSelected} />;
     case "colorpicker":
@@ -340,11 +320,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     () =>
       items
         ?.map((item, index) => {
-          if (
-            item.type !== "line" &&
-            item.type !== "separator" &&
-            !item.styles?.IsDisabled
-          ) {
+          if (item.type !== "line" && item.type !== "separator" && !item.styles?.IsDisabled) {
             return index;
           }
           return undefined;
@@ -353,10 +329,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     [items]
   );
   const numOfItems = useMemo(() => usableItems.length, [usableItems]);
-  const maxVisibleItems = useMemo(
-    () => Math.min(maxVisibleItemsParam, items?.length ?? maxVisibleItemsParam),
-    [maxVisibleItemsParam, items]
-  );
+  const maxVisibleItems = useMemo(() => Math.min(maxVisibleItemsParam, items?.length ?? maxVisibleItemsParam), [maxVisibleItemsParam, items]);
 
   useNuiEvent<historyProps>("menu:setIndexHistory", (data) => {
     let lastMenu: string = data.lastMenu;
@@ -376,39 +349,15 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
       if (indexHistory[newMenu].mask) {
         setMask(indexHistory[newMenu].mask);
       } else {
-        const usable =
-          items
-            ?.map((item, idx) =>
-              item.type !== "line" &&
-              item.type !== "separator" &&
-              !item.styles?.IsDisabled
-                ? idx
-                : undefined
-            )
-            .filter((item): item is number => item !== undefined) ?? [];
+        const usable = items?.map((item, idx) => (item.type !== "line" && item.type !== "separator" && !item.styles?.IsDisabled ? idx : undefined)).filter((item): item is number => item !== undefined) ?? [];
         const nb = usable.length;
-        const maxVisible = Math.min(
-          maxVisibleItemsParam,
-          items?.length ?? maxVisibleItemsParam
-        );
+        const maxVisible = Math.min(maxVisibleItemsParam, items?.length ?? maxVisibleItemsParam);
 
         setMask({ start: 0, end: maxVisible - 1 });
       }
     } else {
-      const usable =
-        items
-          ?.map((item, idx) =>
-            item.type !== "line" &&
-            item.type !== "separator" &&
-            !item.styles?.IsDisabled
-              ? idx
-              : undefined
-          )
-          .filter((item): item is number => item !== undefined) ?? [];
-      const maxVisible = Math.min(
-        maxVisibleItemsParam,
-        items?.length ?? maxVisibleItemsParam
-      );
+      const usable = items?.map((item, idx) => (item.type !== "line" && item.type !== "separator" && !item.styles?.IsDisabled ? idx : undefined)).filter((item): item is number => item !== undefined) ?? [];
+      const maxVisible = Math.min(maxVisibleItemsParam, items?.length ?? maxVisibleItemsParam);
       setMask({ start: 0, end: maxVisible - 1 });
       setIndex(1);
     }
@@ -422,10 +371,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     let id = index - 1;
     switch (event.key) {
       case "ArrowUp":
-        if (
-          !document.activeElement?.classList.contains("content") &&
-          !document.activeElement?.classList.contains("search-bar")
-        ) {
+        if (!document.activeElement?.classList.contains("content") && !document.activeElement?.classList.contains("search-bar")) {
           let lastIndex = index;
           let newIndex;
           if (index > 1) {
@@ -451,18 +397,12 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
         }
         break;
       case "ArrowDown":
-        if (
-          !document.activeElement?.classList.contains("content") &&
-          !document.activeElement?.classList.contains("search-bar")
-        ) {
+        if (!document.activeElement?.classList.contains("content") && !document.activeElement?.classList.contains("search-bar")) {
           let lastIndex = index;
           let newIndex;
           if (index < numOfItems) {
             newIndex = index + 1;
-            if (
-              id + 1 == usableItems.length - 1 &&
-              usableItems[id] < (items?.length ?? maxVisibleItems)
-            ) {
+            if (id + 1 == usableItems.length - 1 && usableItems[id] < (items?.length ?? maxVisibleItems)) {
               setMask({
                 start: Math.max(0, (items?.length ?? 0) - maxVisibleItems),
                 end: (items?.length ?? 0) - 1,
@@ -493,11 +433,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             listChange: true,
             index: item.index < item.items.length ? item.index + 1 : 1,
           });
-        } else if (
-          item.type === "colorslist" &&
-          item.index !== undefined &&
-          item.colors
-        ) {
+        } else if (item.type === "colorslist" && item.index !== undefined && item.colors) {
           if (information?.theme.menu.sound) {
             SendMessage("sounds:play", { sound: "switch" });
           }
@@ -507,11 +443,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             listChange: true,
             index: item.index < item.colors.length ? item.index + 1 : 1,
           });
-        } else if (
-          item.type === "slider" &&
-          item.percentage !== undefined &&
-          item.step !== undefined
-        ) {
+        } else if (item.type === "slider" && item.percentage !== undefined && item.step !== undefined) {
           if (information?.theme.menu.sound) {
             SendMessage("sounds:play", { sound: "switch" });
           }
@@ -535,11 +467,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             listChange: true,
             index: item.index === 1 ? item.items.length : item.index - 1,
           });
-        } else if (
-          item.type === "colorslist" &&
-          item.index !== undefined &&
-          item.colors
-        ) {
+        } else if (item.type === "colorslist" && item.index !== undefined && item.colors) {
           if (information?.theme.menu.sound) {
             SendMessage("sounds:play", { sound: "switch" });
           }
@@ -550,11 +478,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
             listChange: true,
             index: item.index === 1 ? item.colors.length : item.index - 1,
           });
-        } else if (
-          item.type === "slider" &&
-          item.percentage !== undefined &&
-          item.step !== undefined
-        ) {
+        } else if (item.type === "slider" && item.percentage !== undefined && item.step !== undefined) {
           if (information?.theme.menu.sound) {
             SendMessage("sounds:play", { sound: "switch" });
           }
@@ -597,10 +521,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
         }
         break;
       case "Backspace":
-        if (
-          !document.activeElement?.classList.contains("content") &&
-          !document.activeElement?.classList.contains("search-bar")
-        ) {
+        if (!document.activeElement?.classList.contains("content") && !document.activeElement?.classList.contains("search-bar")) {
           if (information?.theme.menu.sound) {
             SendMessage("sounds:play", { sound: "backspace" });
           }
@@ -620,18 +541,10 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     const isEditableElement = (el: EventTarget | null) => {
       if (!(el instanceof HTMLElement)) return false;
       const tag = el.tagName.toLowerCase();
-      const editable =
-        tag === "input" || tag === "textarea" || el.isContentEditable;
+      const editable = tag === "input" || tag === "textarea" || el.isContentEditable;
       return editable;
     };
-    const validKeys = [
-      "ArrowUp",
-      "ArrowDown",
-      "ArrowLeft",
-      "ArrowRight",
-      "Enter",
-      "Backspace",
-    ];
+    const validKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Backspace"];
 
     const handleKeyDown = (event: KeyboardEvent) => {
       const pressedKey = event.key;
@@ -651,10 +564,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
         return;
       } else {
         processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
-        const delay =
-          (pressedKey === "Backspace"
-            ? 250
-            : information?.theme.menu.keyPressDelay || 150) * 0.4;
+        const delay = (pressedKey === "Backspace" ? 250 : information?.theme.menu.keyPressDelay || 150) * 0.4;
 
         const interval = window.setInterval(() => {
           processKeyPressRef.current({ key: pressedKey } as KeyboardEvent);
@@ -701,55 +611,46 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
     fetchNui("menu:closed");
   };
 
-  useNuiEvent<infoProps>(
-    "menu:show",
-    ({ title, subtitle, description, banner, theme }) => {
-      if (theme?.menu?.font) {
-        const existingLink = document.querySelector(
-          'link[data-font="customMenuFont"]'
-        );
-        if (existingLink) {
-          existingLink.setAttribute("href", theme.menu.font);
-        } else {
-          const link = document.createElement("link");
-          link.rel = "stylesheet";
-          link.href = theme.menu.font;
-          link.setAttribute("data-font", "customMenuFont");
-          document.head.appendChild(link);
-        }
-        const url = new URL(theme.menu.font);
-        const familyParam = url.searchParams.get("family");
-        const fontName =
-          familyParam?.split(":")[0].replace(/\+/g, " ") || "sans-serif";
-        document.documentElement.style.setProperty(
-          "--custom-menu-font-family",
-          fontName
-        );
-      }
-
-      if (editMod) {
-        setInformation({
-          title: "Title",
-          subtitle: "Subtitle",
-          description: "Description",
-          theme: theme!,
-          banner: "",
-        });
+  useNuiEvent<infoProps>("menu:show", ({ title, subtitle, description, banner, theme }) => {
+    if (theme?.menu?.font) {
+      const existingLink = document.querySelector('link[data-font="customMenuFont"]');
+      if (existingLink) {
+        existingLink.setAttribute("href", theme.menu.font);
       } else {
-        setInformation({
-          title: title,
-          subtitle: subtitle,
-          description: description,
-          theme: theme!,
-          banner: banner,
-        });
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = theme.menu.font;
+        link.setAttribute("data-font", "customMenuFont");
+        document.head.appendChild(link);
       }
-
-      setMask({ start: 0, end: theme.menu.maxVisibleItems - 1 });
-      setIndex(1);
-      setVisible(true);
+      const url = new URL(theme.menu.font);
+      const familyParam = url.searchParams.get("family");
+      const fontName = familyParam?.split(":")[0].replace(/\+/g, " ") || "sans-serif";
+      document.documentElement.style.setProperty("--custom-menu-font-family", fontName);
     }
-  );
+
+    if (editMod) {
+      setInformation({
+        title: "Title",
+        subtitle: "Subtitle",
+        description: "Description",
+        theme: theme!,
+        banner: "",
+      });
+    } else {
+      setInformation({
+        title: title,
+        subtitle: subtitle,
+        description: description,
+        theme: theme ?? information?.theme!,
+        banner: banner,
+      });
+    }
+
+    setMask({ start: 0, end: theme.menu.maxVisibleItems - 1 });
+    setIndex(1);
+    setVisible(true);
+  });
 
   useNuiEvent("menu:close", closeMenu);
 
@@ -799,8 +700,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
   const defaultAnimations = { entry: "fadeIn", exit: "fadeOut" };
 
   const calculateRotation = () => {
-    if (!menuRef.current || !information?.theme.menu?.perspective)
-      return "rotateY(0deg)";
+    if (!menuRef.current || !information?.theme.menu?.perspective) return "rotateY(0deg)";
 
     const menuRect = menuRef.current.getBoundingClientRect();
     const centerX = window.innerWidth / 2;
@@ -834,22 +734,12 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
           <motion.div
             ref={menuRef}
             id="menu-container"
-            initial={
-              getAnimation(
-                information?.theme.menu.animations ?? defaultAnimations
-              ).initialAnim
-            }
+            initial={getAnimation(information?.theme.menu.animations ?? defaultAnimations).initialAnim}
             animate={{
-              ...getAnimation(
-                information?.theme.menu.animations ?? defaultAnimations
-              ).animateAnim,
+              ...getAnimation(information?.theme.menu.animations ?? defaultAnimations).animateAnim,
               transform: calculateRotation(),
             }}
-            exit={
-              getAnimation(
-                information?.theme.menu.animations ?? defaultAnimations
-              ).exitAnim
-            }
+            exit={getAnimation(information?.theme.menu.animations ?? defaultAnimations).exitAnim}
             style={
               !information?.theme.menu.margin
                 ? {
@@ -857,17 +747,13 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                     maxWidth: information?.theme.menu.width ?? "20vw",
                     borderRadius: `${information?.theme.menu.cornersRadius}em`,
                     background: `${information?.theme.menu.colors.background}`,
-                    boxShadow: `${
-                      information?.theme.menu.shadow ? "0 0 10px black" : "none"
-                    }`,
+                    boxShadow: `${information?.theme.menu.shadow ? "0 0 10px black" : "none"}`,
                   }
                 : {
                     minWidth: information?.theme.menu.width ?? "20vw",
                     maxWidth: information?.theme.menu.width ?? "20vw",
                     gap: "1vh",
-                    boxShadow: `${
-                      information?.theme.menu.shadow ? "0 0 10px black" : "none"
-                    }`,
+                    boxShadow: `${information?.theme.menu.shadow ? "0 0 10px black" : "none"}`,
                   }
             }
           >
@@ -877,19 +763,11 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                 style={
                   isUrl(information?.banner)
                     ? {
-                        borderRadius: `${
-                          !information.theme.menu.margin
-                            ? 0
-                            : information?.theme.menu.cornersRadius
-                        }em`,
+                        borderRadius: `${!information.theme.menu.margin ? 0 : information?.theme.menu.cornersRadius}em`,
                       }
                     : {
                         minHeight: "10vh",
-                        borderRadius: `${
-                          !information.theme.menu.margin
-                            ? 0
-                            : information?.theme.menu.cornersRadius
-                        }em`,
+                        borderRadius: `${!information.theme.menu.margin ? 0 : information?.theme.menu.cornersRadius}em`,
                         ...(isUrl(information?.theme.menu.colors.banner)
                           ? {
                               backgroundImage: `url(${information?.theme.menu.colors.banner})`,
@@ -903,19 +781,10 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                       }
                 }
               >
-                {isUrl(information?.banner) && (
-                  <img src={information?.banner} alt="banner" id="image" />
-                )}
+                {isUrl(information?.banner) && <img src={information?.banner} alt="banner" id="image" />}
                 <div id="titles">
-                  {information?.title && information?.title.length > 0 && (
-                    <h1 id="title">{formatString(information?.title)}</h1>
-                  )}
-                  {information?.subtitle &&
-                    information?.subtitle.length > 0 && (
-                      <h1 id="subtitle">
-                        {formatString(information?.subtitle)}
-                      </h1>
-                    )}
+                  {information?.title && information?.title.length > 0 && <h1 id="title">{formatString(information?.title)}</h1>}
+                  {information?.subtitle && information?.subtitle.length > 0 && <h1 id="subtitle">{formatString(information?.subtitle)}</h1>}
                 </div>
               </div>
             )}
@@ -933,12 +802,7 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                       }
                 }
               >
-                {information?.description &&
-                  information?.description?.length > 0 && (
-                    <h1 id="description">
-                      {formatString(information?.description)}
-                    </h1>
-                  )}
+                {information?.description && information?.description?.length > 0 && <h1 id="description">{formatString(information?.description)}</h1>}
                 <h1 id="counter">
                   {index}/{numOfItems}
                 </h1>
@@ -964,51 +828,21 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                   style={
                     information?.theme.menu.colors.itemSelected
                       ? {
-                          ...getHoverType(
-                            information.theme.menu.hoverStyle,
-                            information?.theme.menu.colors.itemSelected
-                          ),
+                          ...getHoverType(information.theme.menu.hoverStyle, information?.theme.menu.colors.itemSelected),
                           top: `${(usableItems[index - 1] - mask.start) * 4}vh`,
-                          transition: `${
-                            information?.theme.menu.animations.onScroll
-                              ? "0.5"
-                              : "0"
-                          }s`,
+                          transition: `${information?.theme.menu.animations.onScroll ? "0.5" : "0"}s`,
                         }
                       : {}
                   }
                 />
                 <AnimatePresence>
-                  <motion.div
-                    variants={
-                      information?.theme.menu.animations.onSwitch
-                        ? listVariants
-                        : {}
-                    }
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    id="items"
-                  >
+                  <motion.div variants={information?.theme.menu.animations.onSwitch ? listVariants : {}} initial="initial" animate="animate" exit="exit" id="items">
                     {items.map((item, i) => {
                       if (i >= mask.start && i <= mask.end) {
                         const isSelected = i === usableItems[index - 1];
                         return (
-                          <motion.div
-                            className="item"
-                            key={item.itemId}
-                            variants={
-                              information?.theme.menu.animations.onSwitch
-                                ? itemVariants
-                                : {}
-                            }
-                          >
-                            {renderMenuItem(
-                              item,
-                              i,
-                              isSelected,
-                              information?.theme
-                            )}
+                          <motion.div className="item" key={item.itemId} variants={information?.theme.menu.animations.onSwitch ? itemVariants : {}}>
+                            {renderMenuItem(item, i, isSelected, information?.theme)}
                           </motion.div>
                         );
                       }
@@ -1032,27 +866,13 @@ const Menu: FC<MenuProps> = ({ editMod = false }) => {
                       }
                 }
               >
-                <svg
-                  width="12"
-                  height="21"
-                  viewBox="0 0 12 21"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M1 14L6 19L11 14M11 7L6 2L1 7"
-                    stroke="white"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                  />
+                <svg width="12" height="21" viewBox="0 0 12 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 14L6 19L11 14M11 7L6 2L1 7" stroke="white" stroke-width="2" stroke-linecap="round" />
                 </svg>
               </div>
             )}
             {(() => {
-              const selectedItem =
-                items && usableItems[index - 1] !== undefined
-                  ? items[usableItems[index - 1]]
-                  : undefined;
+              const selectedItem = items && usableItems[index - 1] !== undefined ? items[usableItems[index - 1]] : undefined;
               return (
                 selectedItem &&
                 selectedItem.description &&
