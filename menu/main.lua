@@ -102,9 +102,6 @@ zUI.SetVisible = function(id, state)
                 banner = menu.banner,
             })
             UpdateItems(id)
-            if menu.opening then
-                menu.opening()
-            end
         else
             MENUS[id].visible = state
             if MENUS[id].closing then

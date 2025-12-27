@@ -5,15 +5,15 @@
     "displayInformations": true,
     "displayControlsIndicator": true,
     "cornersRadius": 0.5,
-    "perspective": true,
+    "perspective": false,
     "margin": false,
-    "shadow": true,
-    "hoverStyle": "liquid",
+    "shadow": false,
+    "hoverStyle": "modern",
     "animations": {
-      "entry": "zoomIn",
-      "exit": "slideOutVertical",
+      "entry": "slideInHorizontal",
+      "exit": "slideOutHorizontal",
       "onSwitch": true,
-      "onScroll": false
+      "onScroll": true
     },
     "colors": {
       "primary": "#FF3837",
@@ -27,7 +27,7 @@
     "keyPressDelay": 300,
     "sound": true,
     "font": "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
-    "maxVisibleItems": 10
+    "maxVisibleItems": 6
   },
   "info": {
     "width": "20vw",
@@ -36,7 +36,7 @@
     "shadow": true,
     "animations": {
       "entry": "zoomIn",
-      "exit": "slideOutVertical"
+      "exit": "slideOutHorizontal"
     },
     "colors": {
       "primary": "#FF3837",
